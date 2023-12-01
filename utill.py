@@ -9,6 +9,7 @@ import torch
 import numpy as np
 import pickle
 import pandas as pd
+import scipy.constants as cs
 
 def gradient_penalty(critic,real, fake,cond, device = 'cpu'):
     BATCH_SIZE, C, H, W= real.shape
@@ -84,21 +85,82 @@ def get_feature_value(data, key, max_n_path = 25):
             feature_pd = pd.concat([feature_pd, data[key+'_%d'%(i+1)]], axis =1)
     return feature_pd
 
-def compute_LOS_prob(los_prob, dist2d, bin_size = 10):
+def compute_linkstate_prob(_prob, dist2d, bin_size = 10, enable_first_prob = True):
     
     dist2d = np.array(dist2d)
     
-    LOS_count = np.zeros(int(max(dist2d))+2)
-    NLOS_count = np.zeros(int(max(dist2d))+2)
+    p_count = np.zeros(int(max(dist2d))+2)
+    n_count = np.zeros(int(max(dist2d))+2)
     dist_2d = np.array(dist2d/bin_size, dtype = int)
     for j, d_2d_i in enumerate(dist_2d):
-        if los_prob[j]>0:
-            LOS_count[d_2d_i] +=1
+        if _prob[j]>0:
+            p_count[d_2d_i] +=1
         else:
-            NLOS_count[d_2d_i] +=1
-    los_prob = LOS_count/(LOS_count + NLOS_count)
-    los_prob[0] = 1.0
-    return los_prob
+            n_count[d_2d_i] +=1
+    _prob = p_count/(p_count + n_count)
+   
+    if enable_first_prob is True:
+        _prob[0] = 1.0
+    
+    return _prob
+
+def get_pdfs(dist2d, angle,  feature, min_dist = 30):
+    #angle_list = []
+    dist_bin_size = 10
+    distance_bins = np.arange(min_dist, 1050,step = dist_bin_size)
+    
+    if feature == 'zod' or feature =='zoa':
+        angle_bin_size = 3
+        angle_bins = np.arange(-90,93, step = angle_bin_size)
+        #v_max = 0.4
+    else:
+        angle_bin_size = 5
+        angle_bins = np.arange(-80, 80, step =angle_bin_size)
+       # v_max = 0.2
+    
+    L = len(distance_bins)
+    M = len(angle_bins)
+    ang_im = np.zeros((M-1, L))
+    angle = np.array(angle)
+    for i, d in enumerate(distance_bins):
+        if d!= distance_bins[-1]:
+            I = (dist2d>d) & (dist2d<d+dist_bin_size)
+        else:
+            I = (dist2d>distance_bins[-1])
+        
+        angle_array = angle[I].reshape(-1)
+        angle_array = angle_array[~np.isnan(angle_array)]
+        #plt.plot(np.sort(angle_array), np.linspace(0,1,len(angle_array)))
+        
+        freq, n_bins = np.histogram(angle_array, bins=angle_bins)
+        ang_im[:,i] = freq/np.sum(freq)
+        #angle_list.append(list(angle_array))
+        
+    return ang_im
+
+
+def compute_rms_spread(chan_params, feature = 'delay'):
+    # extract the feature data 
+    d = np.array(chan_params[feature])
+    if feature != 'delay':
+        # convert from degrees to radians
+        d = np.deg2rad(d)
+    else:
+        # compute 'excess delay'
+        d = d - np.min(d)
+            
+    # derive path gains of multipaths
+    path_loss = np.array(chan_params['path_loss'])
+    path_gain_lin = 10**(-0.1*path_loss)
+    # normalize path gains
+    path_gain_normlzed = path_gain_lin/path_gain_lin.sum()
+    # computer first order average with normalized path gains
+    d_avg_first_order = (d*path_gain_normlzed).sum()
+    # compute the second order average in the same way
+    d_avg_second_order = ((d**2)*path_gain_normlzed).sum()
+    # compute RMS
+    rms = np.sqrt(d_avg_second_order - d_avg_first_order**2)
+    return rms
 
 '''
 class Dataset(torch.utils.data.Dataset):
