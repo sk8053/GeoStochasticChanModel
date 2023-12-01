@@ -5,56 +5,64 @@ Created on Wed Mar  8 10:14:57 2023
 @author: seongjoon kang
 """
 import torch
-import torch.nn as nn
 import torch.optim as optim
 import torchvision
-import torchvision.datasets as datasets
-import torchvision.transforms as transforms
+#import torchvision.datasets as datasets
+#import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from c_wgan import Generator, Critic, initialize_weight,embedder
+from c_wgan import Generator, Critic, initialize_weight #,embedder
 from utill import gradient_penalty, Dataset
 import numpy as np
 import pickle
-import matplotlib.pyplot as plt
+
 import os
 import shutil
-from torch.optim.lr_scheduler import ExponentialLR
+#from torch.optim.lr_scheduler import ExponentialLR
 
 if os.path.exists('logs'):
     shutil.rmtree('logs')
-
 # Hyperparameters etc
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(device)
-lr = 5e-4 # learning rate
+
+load = True
+lr = 1e-4 # learning rate
 
 img_size = [64, 50]
 img_channel = 1
-z_dim = 10
+z_dim = 25
 n_epoch = 12
-critic_features = 32
+critic_features = 32+3
 generator_features = 32
 critic_iteration = 5
 lambda_gp= 5
-batch_size = 64
+batch_size = 256
 vertical_repeats = 8
 horizontal_repeats = 2
+
+data_dir = 'Herald_square_data'
+saved_loc = f'save_model/cwgan_z_{z_dim}.pt'
+
 # read data
-with open('Boston_data/data_total.pickle','rb') as f:
+with open(f'{data_dir}/data_total.pickle','rb') as f:
     dataset = pickle.load(f)
 img_size = [dataset.shape[-2]*vertical_repeats, 
             dataset.shape[-1]*horizontal_repeats]
 
-with open('Boston_data/cond_total.pickle','rb') as f:
+with open(f'{data_dir}/cond_total.pickle','rb') as f:
     cond = pickle.load(f)
 
 print ('data is loaded, shape is ', dataset.shape)
-print ('conditions is loaded, shape is ', cond.shape)
+
 
 dist3d = np.sqrt(cond[:,0]**2 + cond[:,1]**2)
-cond = np.column_stack((cond, dist3d[:,None]))
+ang = np.arccos(cond[:,1]/dist3d)
+ang = np.rad2deg(ang)
+cond = np.column_stack((cond[:,0]/1000,cond[:,1]/120, dist3d[:,None]/1000, ang/90))
 cond_vec = torch.tensor(cond)
+
+print ('conditions is loaded, shape is ', cond_vec.shape)
 
 dataset= torch.tensor(dataset[:,None])
 n_cond = cond_vec.shape[1] 
@@ -72,19 +80,16 @@ print("Num params of generator: ", sum(p.numel() for p in gen.parameters()))
 print("Num params of critic: ", sum(p.numel() for p in critic.parameters()))
 
 
-opt_gen = optim.Adam(gen.parameters(), lr=lr, betas = (0.0,0.9))
-
-opt_critic = optim.Adam(critic.parameters(), lr=lr, betas = (0.0,0.9))
+opt_gen = optim.Adam(gen.parameters(), lr=lr, betas = (0.5,0.9))
+opt_critic = optim.Adam(critic.parameters(), lr=lr, betas = (0.5,0.9))
 # schedulers are optional
-scheduler1 = ExponentialLR(opt_gen, gamma=0.95)
-scheduler2 = ExponentialLR(opt_critic, gamma=0.95)
+#scheduler1 = ExponentialLR(opt_gen, gamma=0.95)
+#scheduler2 = ExponentialLR(opt_critic, gamma=0.95)
 
-load = False
 if load == True:
-    PATH = f'save_model/cwgan_z_{z_dim}.pt'
+    PATH = saved_loc
     gen.load_state_dict(torch.load(PATH)['gen'])
     critic.load_state_dict(torch.load(PATH)['critic'])
-    
     opt_gen.load_state_dict(torch.load(PATH)['opt_gen'])
     opt_critic.load_state_dict(torch.load(PATH)['opt_critic'])
 else:
@@ -106,7 +111,7 @@ best_loss_gen = 1e5
 loss_gen_list, loss_critic_list = [], []          
 for epoch in range(n_epoch):
     
-    if epoch % 2 ==0:
+    if epoch!=0 and epoch % 1 ==0:
         print("=============== model is saved ====================")
         torch.save({
             'gen':gen.state_dict(),
@@ -116,16 +121,13 @@ for epoch in range(n_epoch):
              'epoch':epoch,
              'loss_critc':loss_critic_list,
              'loss_gen':loss_gen_list,
-            }, f'save_model/cwgan_z_{z_dim}.pt')
+            }, saved_loc)
         
         
     loss_gen_sum, loss_critic_sum = 0,0
     # Target labels not needed! <3 unsupervised
     for batch_idx, (real, cond) in enumerate(loader):
         cond = cond.to(device, dtype = torch.float)
-        #print(cond.shape)
-        #noise_r = (torch.rand(real.shape)*2 -1)/5
-        #real += noise_r
         real = real.to(device, dtype = torch.float)
         real = torch.repeat_interleave(real, vertical_repeats, dim = -2)
         real = torch.repeat_interleave(real, horizontal_repeats, dim = -1) # 64*50
@@ -159,7 +161,7 @@ for epoch in range(n_epoch):
         
         if batch_idx % 100 == 0 and batch_idx > 0:
             gen.eval()
-            critic.eval()
+            #critic.eval()
             print(
                 f"Epoch [{epoch}/{n_epoch}] Batch {batch_idx}/{len(loader)} \
                   Loss D: {loss_critic:.4f}, loss G: {loss_gen:.4f}")
@@ -180,7 +182,7 @@ for epoch in range(n_epoch):
 
             step += 1
             gen.train()
-            critic.train()
+            #critic.train()
     
     loss_gen_list.append(loss_gen_sum/len(loader))
     loss_critic_list.append(loss_critic_sum/len(loader))
@@ -193,7 +195,10 @@ torch.save({
     'critic':critic.state_dict(),
      'opt_gen':opt_gen.state_dict(),
      'opt_critic':opt_critic.state_dict(),
-    }, f'save_model/cwgan_z_{z_dim}_.pt')
+     'epoch':epoch,
+     'loss_critc':loss_critic_list,
+     'loss_gen':loss_gen_list,
+    }, saved_loc)
       
       
                
