@@ -23,7 +23,7 @@ pathloss_threshold = 180
 max_n_path = 25
 #dist2d_max = 1250
 #dist2d_min = 10
-z_dim = 25
+z_dim = 35
 n_cond = 4
 dir_ = 'Herald_square_data'
 
@@ -57,7 +57,7 @@ dist2d_list =[]
 los_zoa, los_zod = [], []
 height_i = np.repeat([height], batch_size)
 
-for iter in tqdm(range(10)):
+for iter in tqdm(range(20)):
     I_ = np.random.permutation(len(bs_data_df_original))[:batch_size]
     
     bs_data_df = bs_data_df_original.iloc[I_,:]
@@ -116,6 +116,9 @@ dly_rms_model, dly_rms_data = [],[]
 aod_rms_model, aod_rms_data = [], []
 aoa_rms_model, aoa_rms_data = [], []
 
+#pl_1path_model, pl_1path_data = [], []
+#dly_1path_model, dly_1path_data = [], []
+
 for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_list_data)):
     
     if len(chan_model['path_loss']) ==0:
@@ -130,7 +133,10 @@ for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_
         _aod_rms_model = compute_rms_spread(chan_model, feature='aod')
         aod_rms_model.append(_aod_rms_model)
         
-        
+        #if len(chan_model['path_loss']) >=2:
+        #pl_1path_model.append(chan_model['path_loss'][0])
+        #dly_1path_model.append(chan_model['delay'][0])
+    
     if len(chan_data['path_loss']) ==0:
         outage_state_data[i] =1
     else:
@@ -142,6 +148,10 @@ for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_
         
         _aod_rms_data = compute_rms_spread(chan_model, feature='aod')
         aod_rms_data.append(_aod_rms_data)
+        
+        #if len(chan_data['path_loss']) >= 2:
+        #pl_1path_data.append(chan_data['path_loss'][0])
+        #dly_1path_data.append(chan_data['delay'][0])
     
         
     pathloss_list_model+= chan_model['path_loss']
@@ -169,8 +179,6 @@ for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_
     phase_data += chan_data['phase']
     
     
-        
-    
     
 dist2d_array= np.array(dist2d_list)
 
@@ -180,6 +188,20 @@ los_prob_data = compute_linkstate_prob(linkstate_list_data, dist2d_array)
 # outage probability 
 outage_prob_model = compute_linkstate_prob(outage_state_model, dist2d_array, enable_first_prob=False)
 outage_prob_data = compute_linkstate_prob(outage_state_data, dist2d_array, enable_first_prob=False)
+
+'''
+plt.figure()
+plt.plot(np.sort(pl_1path_data), np.linspace(0,1,len(pl_1path_data)), label = 'data')
+plt.plot(np.sort(pl_1path_model), np.linspace(0,1,len(pl_1path_model)), label = 'model')
+plt.title(f'Pathloss, height = {height}m')
+plt.legend()
+
+plt.figure()
+plt.plot(np.sort(dly_1path_data), np.linspace(0,1,len(dly_1path_data)), label = 'data')
+plt.plot(np.sort(dly_1path_model), np.linspace(0,1,len(dly_1path_model)), label = 'model')
+plt.legend()
+plt.title(f'Delay, height = {height}m')
+
 
 plt.figure()
 plt.plot(np.sort(dly_rms_data), np.linspace(0,1,len(dly_rms_data)), label = 'data')
@@ -192,18 +214,27 @@ plt.plot(np.sort(aoa_rms_data), np.linspace(0,1,len(dly_rms_data)), label = 'dat
 plt.plot(np.sort(aoa_rms_model), np.linspace(0,1,len(dly_rms_model)), label = 'model')
 plt.title(f'AOA, height = {height}m')
 plt.legend()
-
+'''
 plt.figure()
-plt.plot(np.sort(aod_rms_data), np.linspace(0,1,len(dly_rms_data)), label = 'data')
-plt.plot(np.sort(aod_rms_model), np.linspace(0,1,len(dly_rms_model)), label = 'model')
-plt.title(f'AOD, height = {height}m')
+plt.plot(np.sort(pathloss_list_data), np.linspace(0,1,len(pathloss_list_data)), label = 'data')
+plt.plot(np.sort(pathloss_list_model), np.linspace(0,1,len(pathloss_list_model)), label = 'model')
+plt.title(f'Pathloss, height = {height}m')
 plt.legend()
+
 
 np.savetxt(f'data/path_loss/path_loss_{height}_model.txt', pathloss_list_model)
 np.savetxt(f'data/path_loss/path_loss_{height}_data.txt', pathloss_list_data)
 
+#np.savetxt(f'data/path_loss/first_pl_{height}_model.txt', pl_1path_model)
+#np.savetxt(f'data/path_loss/first_pl_{height}_data.txt', pl_1path_data)
+
+
 np.savetxt(f'data/delay/delay_{height}_model.txt', delay_list_model)
 np.savetxt(f'data/delay/delay_{height}_data.txt', delay_list_data)
+
+#np.savetxt(f'data/delay/first_delay_{height}_model.txt', dly_1path_model)
+#np.savetxt(f'data/delay/first_delay_{height}_data.txt', dly_1path_data)
+
 
 np.savetxt(f'data/link state/link state_{height}_model.txt', los_prob_model)
 np.savetxt(f'data/link state/link state_{height}_data.txt', los_prob_data)
