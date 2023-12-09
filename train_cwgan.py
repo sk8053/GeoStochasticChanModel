@@ -15,7 +15,7 @@ from c_wgan import Generator, Critic, initialize_weight #,embedder
 from utill import gradient_penalty, Dataset
 import numpy as np
 import pickle
-
+import matplotlib.pyplot as plt
 import os
 import shutil
 #from torch.optim.lr_scheduler import ExponentialLR
@@ -26,18 +26,18 @@ if os.path.exists('logs'):
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(device)
 
-load = True
-lr = 1e-4 # learning rate
+load = False
+lr = 1e-5 # learning rate
 
 img_size = [64, 50]
 img_channel = 1
 z_dim = 25
-n_epoch = 12
-critic_features = 32+3
+n_epoch = 20
+critic_features = 32+5
 generator_features = 32
 critic_iteration = 5
 lambda_gp= 5
-batch_size = 256
+batch_size = 256  #256
 vertical_repeats = 8
 horizontal_repeats = 2
 
@@ -51,15 +51,19 @@ img_size = [dataset.shape[-2]*vertical_repeats,
             dataset.shape[-1]*horizontal_repeats]
 
 with open(f'{data_dir}/cond_total.pickle','rb') as f:
-    cond = pickle.load(f)
+    cond_data = pickle.load(f)
+
+#I = np.random.permutation(range(len(dataset)))
+#dataset = dataset[I[:100000]]
+#cond_data = cond_data[I[:100000]]
 
 print ('data is loaded, shape is ', dataset.shape)
 
 
-dist3d = np.sqrt(cond[:,0]**2 + cond[:,1]**2)
-ang = np.arccos(cond[:,1]/dist3d)
+dist3d = np.sqrt(cond_data[:,0]**2 + cond_data[:,1]**2)
+ang = np.arccos(cond_data[:,1]/dist3d)
 ang = np.rad2deg(ang)
-cond = np.column_stack((cond[:,0]/1000,cond[:,1]/120, dist3d[:,None]/1000, ang/90))
+cond = np.column_stack((cond_data[:,0]/1000,cond_data[:,1]/120, dist3d[:,None]/1000, ang/90))
 cond_vec = torch.tensor(cond)
 
 print ('conditions is loaded, shape is ', cond_vec.shape)
@@ -110,19 +114,19 @@ best_loss_gen = 1e5
 
 loss_gen_list, loss_critic_list = [], []          
 for epoch in range(n_epoch):
-    
-    if epoch!=0 and epoch % 1 ==0:
-        print("=============== model is saved ====================")
-        torch.save({
-            'gen':gen.state_dict(),
-            'critic':critic.state_dict(),
-             'opt_gen':opt_gen.state_dict(),
-             'opt_critic':opt_critic.state_dict(),
-             'epoch':epoch,
-             'loss_critc':loss_critic_list,
-             'loss_gen':loss_gen_list,
-            }, saved_loc)
-        
+    if 1:
+        if epoch!=0 and epoch % 1 ==0:
+            print("=============== model is saved ====================")
+            torch.save({
+                'gen':gen.state_dict(),
+                'critic':critic.state_dict(),
+                 'opt_gen':opt_gen.state_dict(),
+                 'opt_critic':opt_critic.state_dict(),
+                 'epoch':epoch,
+                 'loss_critc':loss_critic_list,
+                 'loss_gen':loss_gen_list,
+                }, saved_loc)
+            
         
     loss_gen_sum, loss_critic_sum = 0,0
     # Target labels not needed! <3 unsupervised
@@ -176,9 +180,24 @@ for epoch in range(n_epoch):
                 img_grid_fake = torchvision.utils.make_grid(
                     fake[:32], normalize=True
                 )
-
+                
+                
                 writer_real.add_image("Real", img_grid_real, global_step=step)
                 writer_fake.add_image("Fake", img_grid_fake, global_step=step)
+                
+                
+                plt.figure(figsize = (4,18))
+                fakes = fake[:16]
+                for j in range(16):
+                    plt.subplot(8,2, j+1)
+                    plt.imshow(fakes[j].detach().cpu().numpy().squeeze())
+                    plt.yticks([])
+                    plt.xticks([])
+                    #ax.autoscale(True)
+                plt.subplots_adjust()
+                plt.tight_layout()    
+                plt.savefig(f'logs_figures/{epoch+1}_{batch_idx}.png')
+                plt.close()
 
             step += 1
             gen.train()

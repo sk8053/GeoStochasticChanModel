@@ -107,7 +107,7 @@ def compute_linkstate_prob(_prob, dist2d, bin_size = 10, enable_first_prob = Tru
 def get_pdfs(dist2d, angle,  feature, min_dist = 30):
     #angle_list = []
     dist_bin_size = 10
-    distance_bins = np.arange(min_dist, 1050,step = dist_bin_size)
+    distance_bins = np.arange(min_dist, 900,step = dist_bin_size)
     
     if feature == 'zod' or feature =='zoa':
         angle_bin_size = 3
