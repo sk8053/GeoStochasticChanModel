@@ -55,8 +55,7 @@ figure();
     %'NumColumns', 2);
 
     %set(h_,'Position',[0.605333333333334 0.0265555550469293 0.244629843643423 0.0666666679382324]);
-%exportgraphics(gcf,'figures/rms_delay.png','Resolution',800);
-exportgraphics(gcf,'figures/rms_delay.eps');
+exportgraphics(gcf,'figures/rms_delay.png','Resolution',800);
 %set(gcf,'Position',[100 100 900 300]);
 %exportgraphics(gcf,'figures/rms_delay_aoa_aod.png','Resolution',800);    
 figure();
@@ -88,8 +87,7 @@ figure();
     yticklabels([]);
     ylabel('');
      xlabel('{\textbf{AOA RMS [rad]}}' ,'interpreter', 'latex','fontweight', 'bold','FontSize',15,'fontname', 'times');
-    %exportgraphics(gcf,'figures/rms_aoa.png','Resolution',800);
-    exportgraphics(gcf,'figures/rms_aoa.eps');
+    exportgraphics(gcf,'figures/rms_aoa.png','Resolution',800);
 
 %nexttile;
 figure();
@@ -120,8 +118,7 @@ figure();
     yticklabels([]);
     ylabel('');
     xlabel('{\textbf{AOD RMS [rad]}}' ,'interpreter', 'latex','fontweight', 'bold','FontSize',15,'fontname', 'times');
-    %exportgraphics(gcf,'figures/rms_aod.png','Resolution',800);
-    exportgraphics(gcf,'figures/rms_aod.eps');
+    exportgraphics(gcf,'figures/rms_aod.png','Resolution',800);
 
 
 figure();
@@ -153,8 +150,7 @@ figure();
     yticklabels([]);
     ylabel('');
      xlabel('{\textbf{ZOA RMS [rad]}}' ,'interpreter', 'latex','fontweight', 'bold','FontSize',15,'fontname', 'times');
-    %exportgraphics(gcf,'figures/rms_zoa.png','Resolution',800);
-    exportgraphics(gcf,'figures/rms_zoa.eps');
+    exportgraphics(gcf,'figures/rms_zoa.png','Resolution',800);
 
 %nexttile;
 figure();
@@ -192,8 +188,8 @@ figure();
     'fontname','times', ...
     'fontsize', 18,...
     'NumColumns', 2);
-    %exportgraphics(gcf,'figures/rms_zod.png','Resolution',800);
-    exportgraphics(gcf,'figures/rms_zod.eps');
+    exportgraphics(gcf,'figures/rms_zod.png','Resolution',800);
+
 
 %set(gcf,'Position',[100 100 900 300]);
 %exportgraphics(gcf,'figures/rms_delay_aoa_aod.png','Resolution',800);

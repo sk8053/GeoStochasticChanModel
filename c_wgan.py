@@ -23,7 +23,7 @@ class Critic(nn.Module):
             self._conv_block(features_c*2, features_c*4, 4, 2, 1), # 1/2
             self._conv_block(features_c*4, 8*features_c, 4, 2, 1), # 1/2
             self._conv_block(features_c*8, 16*features_c, 4, 2, 1), #1/2
-            self._conv_block(features_c*16,1,  4, 2, 1, disable_norm_act=True, is_bias=True), 
+            self._conv_block(features_c*16,1,4, 2, 1, disable_norm_act=True, is_bias=True), 
             )
     def _conv_block(self, in_channels, out_channels, kernel_size, stride, padding, 
                     disable_norm_act = False, is_bias = False):
