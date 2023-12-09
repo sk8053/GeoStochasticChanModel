@@ -30,11 +30,12 @@ ls_120_d = importdata('link state\link state_120_data.txt');
 ot_120_m = importdata('link state\outage state_120_model.txt');
 ot_120_d = importdata('link state\outage state_120_data.txt');
 
-
-t = tiledlayout(1,5);
-t.TileSpacing = 'compact';
+eps = false;
+%t = tiledlayout(1,5);
+%t.TileSpacing = 'compact';
 %subplot(1,5,1);
-nexttile;
+%nexttile;
+figure();
 %np.arange(len(los_prob_model)*10, step = 10), los_prob_model
     h1 = plot((1:length(ls_1_6_m))*10, ls_1_6_m);
     hold on;
@@ -48,14 +49,17 @@ nexttile;
     %h2_ot_m = plot((1:20:length(ot_1_6_d))*10, ot_1_6_d);
 
     grid on;
-    title('height = 1.6 m', 'FontSize',12)
+    title('height = 1.6 m', 'FontSize',18, 'FontWeight','bold')
     
     %xticks(linspace(80, 200, 7));
     ax = gca;
     ax.GridLineWidth = 2;
+    ax.YAxis.FontSize = 15;
+    ax.XAxis.FontSize = 15;
+
     set(gca,'fontname','times');
     set(gca,'fontweight','bold');
-    ylabel('Proability', 'FontSize',13);
+    ylabel('Proability', 'FontSize',17);
     
     set(h1, 'LineWidth',2.0);
     set(h1, 'Color', 'blue');
@@ -73,21 +77,28 @@ nexttile;
     set(h2_ot, 'LineWidth',2.0);
     h2_ot.Color = [0.9804    0.3922    0.3922];
     set(h2_ot, 'LineStyle','-');
+     xlim([0, 1000]);
+    xticks([0:250:1200]);
+    yticks(linspace(0,1,11));
     
+    xlabel('2D distance [m]','fontweight', 'bold','FontSize',17,'fontname', 'times');
     
-    h = legend([h1, h2], 'model', 'data', ...
-    'Location', 'west','fontweight','bold', 'fontsize', 12,  'box','on','NumColumns', 2);
+     if eps == true
+        exportgraphics(gcf,'figures/los_prob_1_6m.eps');
+    else
+        exportgraphics(gcf,'figures/los_prob_1_6m.png','Resolution', 800);
+    end
     %legend1 = legend(axes1,'show');
-    set(h,...
-    'Position',[0.625333333333333 0.011888888030582 0.244629843643423 0.0666666679382324],...
-    'NumColumns',2,...
-    'FontSize',12);
-    xlim([0, 1000])
-    xticks([0:250:1200])
+    %set(h,...
+    %'Position',[0.625333333333333 0.011888888030582 0.244629843643423 0.0666666679382324],...
+    %'NumColumns',2,...
+    %'FontSize',12);
+
     %legend([h1, h2], 'model', 'data', ...
     %    'Location', 'northwest', 'interpreter', 'latex', 'fontsize', 10);
 %subplot(1,5,2);
-nexttile;
+%nexttile;
+figure();
     h3 = plot((1:length(ls_30_m))*10, ls_30_m);
     hold on;
     h4 = plot((1:length(ls_30_d))*10, ls_30_d);
@@ -99,10 +110,13 @@ nexttile;
     hold on;
 
     grid on;
-    title('height = 30 m','FontSize',12)
+    title('height = 30 m','FontSize',18)
     %xticks(linspace(80, 200, 7));
     ax = gca;
     ax.GridLineWidth = 2;
+    ax.YAxis.FontSize = 15;
+    ax.XAxis.FontSize = 15;
+
     set(gca,'fontname','times')
     set(gca,'fontweight','bold');
     set(h3, 'LineWidth',2.0);
@@ -123,9 +137,18 @@ nexttile;
     
     set(gca,'yticklabel',[])
     xlim([0, 1000])
-    xticks([0:250:1200])
+    xticks([0:250:1200]);
+    yticks(linspace(0,1,11));
+    yticklabels([]);
+    xlabel('2D distance [m]','fontweight', 'bold','FontSize',17,'fontname', 'times');
+    
+    if eps == true
+        exportgraphics(gcf,'figures/los_prob_30m.eps');
+    else
+        exportgraphics(gcf,'figures/los_prob_30m.png','Resolution', 800);
+    end
 %subplot(1,5,3);
-nexttile;
+figure();
     h5 = plot((1:length(ls_60_m))*10, ls_60_m);
     hold on;
     h6 = plot((1:length(ls_60_d))*10, ls_60_d);
@@ -137,10 +160,13 @@ nexttile;
     hold on;
 
     grid on;
-    title('height = 60 m','FontSize',12)
+    title('height = 60 m','FontSize',18)
     %xticks(linspace(80, 200, 7));
     ax = gca;
     ax.GridLineWidth = 2;
+    ax.YAxis.FontSize = 15;
+    ax.XAxis.FontSize = 15;
+
     set(gca,'fontname','times');
     set(gca,'fontweight','bold');
     set(h5, 'LineWidth',2.0);
@@ -161,9 +187,25 @@ nexttile;
     set(h6_ot, 'LineStyle','-');
     %viscircles([1, 2], 3);
     xlim([0, 1000])
-    xticks([0:250:1200])
+    xticks([0:250:1200]);
+    yticks(linspace(0,1,11));
+    yticklabels([]);
+    xlabel('2D distance [m]','fontweight', 'bold','FontSize',17,'fontname', 'times');
+    x = [0.3 0.195];
+    y = [0.75 0.7];
+    annotation('textarrow',x,y,'String',' LOS','FontSize',17,'FontWeight','bold','Linewidth',3)
+
+    x = [0.7 0.815];
+    y = [0.75 0.66];
+    annotation('textarrow',x,y,'String','Outage','FontSize',17,'FontWeight','bold','Linewidth',3);
+
+    if eps == true
+        exportgraphics(gcf,'figures/los_prob_60m.eps');
+    else
+        exportgraphics(gcf,'figures/los_prob_60m.png','Resolution', 800);
+    end
 %subplot(1,5,4);
-nexttile;
+figure();
     h7 = plot((1:length(ls_90_m))*10, ls_90_m);
     hold on;
     h8 = plot((1:length(ls_90_d))*10, ls_90_d);
@@ -175,10 +217,13 @@ nexttile;
     hold on;
 
     grid on;
-    title('height = 90 m','FontSize',12)
+    title('height = 90 m','FontSize',18);
     %xticks(linspace(80, 200, 7));
     ax = gca;
     ax.GridLineWidth = 2;
+    ax.YAxis.FontSize = 15;
+    ax.XAxis.FontSize = 15;
+
     set(gca,'fontname','times');
     set(gca,'fontweight','bold');
     set(h7, 'LineWidth',2.0);
@@ -198,9 +243,18 @@ nexttile;
 
     set(gca,'yticklabel',[])
     xlim([0, 1000])
-    xticks([0:250:1200])
+    xticks([0:250:1200]);
+    yticks(linspace(0,1,11));
+    yticklabels([]);
+    xlabel('2D distance [m]','fontweight', 'bold','FontSize',17,'fontname', 'times');
+    
+    if eps == true
+        exportgraphics(gcf,'figures/los_prob_90m.eps');
+    else
+        exportgraphics(gcf,'figures/los_prob_90m.png','Resolution', 800);
+    end
  %subplot(1,5,5);
- nexttile;
+ figure();
     h9 = plot((1:length(ls_120_m))*10, ls_120_m);
     hold on;
     h10 =plot((1:length(ls_120_d))*10, ls_120_d);
@@ -212,12 +266,12 @@ nexttile;
     hold on;
 
     grid on;
-    title('height = 120 m','FontSize',12)
+    title('height = 120 m','FontSize',18)
     %xticks(linspace(80, 200, 7));
     ax = gca;
     ax.GridLineWidth = 2;
-    ax.YAxis.FontSize = 9;
-    ax.XAxis.FontSize = 9;
+    ax.YAxis.FontSize = 15;
+    ax.XAxis.FontSize = 15;
 
     set(gca,'fontname','times');
     set(gca,'fontweight','bold');
@@ -236,9 +290,23 @@ nexttile;
     h10_ot.Color = [0.9804    0.3922    0.3922];
     set(h10_ot, 'LineStyle','-');
 
-    set(gca,'yticklabel',[])
-    xlim([0, 1000])
-    xticks([0:250:1200])
-xlabel(t, '2D distance [m]','fontweight', 'bold','FontSize',13,'fontname', 'times');
-set(gcf,'Position',[100 100 800 300]);
-exportgraphics(gcf,'figures/los_prob.png','Resolution',800);
+    set(gca,'yticklabel',[]);
+    xlim([0, 1000]);
+    xticks([0:250:1200]);
+    yticks(linspace(0,1,11));
+    yticklabels([]);
+    xlabel('2D distance [m]','fontweight', 'bold','FontSize',17,'fontname', 'times');
+
+    h = legend([h9, h10], 'model', 'data', ...
+    'Location', 'northeast','fontweight','bold', 'fontsize', 15,  'box','on','NumColumns', 1);
+
+
+    if eps == true
+        exportgraphics(gcf,'figures/los_prob_120m.eps');
+    else
+        exportgraphics(gcf,'figures/los_prob_120m.png','Resolution', 800);
+    end
+%set(gcf,'Position',[100 100 800 300]);
+%exportgraphics(gcf,'figures/los_prob.png','Resolution',800);
+%exportgraphics(gcf,'figures/los_prob.pdf','ContentType','vector', 'Resolution',600);
+%exportgraphics(gcf,'figures/los_prob.eps');
