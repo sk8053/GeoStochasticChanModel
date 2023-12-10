@@ -198,42 +198,42 @@ plt.plot(np.sort(aod_rms_data), np.linspace(0,1,len(dly_rms_data)), label = 'dat
 plt.plot(np.sort(aod_rms_model), np.linspace(0,1,len(dly_rms_model)), label = 'model')
 plt.title(f'AOD, height = {height}m')
 plt.legend()
-
-np.savetxt(f'data/path_loss/path_loss_{height}_model.txt', pathloss_list_model)
-np.savetxt(f'data/path_loss/path_loss_{height}_data.txt', pathloss_list_data)
-
-np.savetxt(f'data/delay/delay_{height}_model.txt', delay_list_model)
-np.savetxt(f'data/delay/delay_{height}_data.txt', delay_list_data)
-
-np.savetxt(f'data/link state/link state_{height}_model.txt', los_prob_model)
-np.savetxt(f'data/link state/link state_{height}_data.txt', los_prob_data)
-
-np.savetxt(f'data/link state/outage state_{height}_model.txt', outage_prob_model)
-np.savetxt(f'data/link state/outage state_{height}_data.txt', outage_prob_data)
-
-
-zoa_img_model = get_pdfs(dist2d_array, ZOA_model_mat-np.array(los_zoa)[:,None], feature='zoa')
-zoa_img_data = get_pdfs(dist2d_array, ZOA_data_mat-np.array(los_zoa)[:,None], feature='zoa')
-zod_img_model = get_pdfs(dist2d_array, ZOD_model_mat-np.array(los_zod)[:,None], feature='zod')
-zod_img_data = get_pdfs(dist2d_array, ZOD_data_mat-np.array(los_zod)[:,None], feature='zod')
-
-np.savetxt(f'data/zenith_angles/zod_{height}_model.txt', zod_img_model)
-np.savetxt(f'data/zenith_angles/zod_{height}_data.txt', zod_img_data)
-np.savetxt(f'data/zenith_angles/zoa_{height}_model.txt', zoa_img_model)
-np.savetxt(f'data/zenith_angles/zoa_{height}_data.txt', zoa_img_data)
-
-np.savetxt(f'data/azimuth_angles/aod_{height}_model.txt', aod_model)
-np.savetxt(f'data/azimuth_angles/aod_{height}_data.txt', aod_data)
-np.savetxt(f'data/azimuth_angles/aoa_{height}_model.txt', aoa_model)
-np.savetxt(f'data/azimuth_angles/aoa_{height}_data.txt', aoa_data)
-np.savetxt(f'data/azimuth_angles/phase_{height}_model.txt', phase_model)
-np.savetxt(f'data/azimuth_angles/phase_{height}_data.txt', phase_data)
-
-np.savetxt(f'data/RMS/delay_rms_{height}_data.txt', dly_rms_data)
-np.savetxt(f'data/RMS/delay_rms_{height}_model.txt', dly_rms_model)
-
-np.savetxt(f'data/RMS/aod_rms_{height}_data.txt', aod_rms_data)
-np.savetxt(f'data/RMS/aod_rms_{height}_model.txt', aod_rms_model)
-
-np.savetxt(f'data/RMS/aoa_rms_{height}_data.txt', aoa_rms_data)
-np.savetxt(f'data/RMS/aoa_rms_{height}_model.txt', aoa_rms_model)
+if 0:
+    np.savetxt(f'data/path_loss/path_loss_{height}_model.txt', pathloss_list_model)
+    np.savetxt(f'data/path_loss/path_loss_{height}_data.txt', pathloss_list_data)
+    
+    np.savetxt(f'data/delay/delay_{height}_model.txt', delay_list_model)
+    np.savetxt(f'data/delay/delay_{height}_data.txt', delay_list_data)
+    
+    np.savetxt(f'data/link state/link state_{height}_model.txt', los_prob_model)
+    np.savetxt(f'data/link state/link state_{height}_data.txt', los_prob_data)
+    
+    np.savetxt(f'data/link state/outage state_{height}_model.txt', outage_prob_model)
+    np.savetxt(f'data/link state/outage state_{height}_data.txt', outage_prob_data)
+    
+    
+    zoa_img_model = get_pdfs(dist2d_array, ZOA_model_mat-np.array(los_zoa)[:,None], feature='zoa')
+    zoa_img_data = get_pdfs(dist2d_array, ZOA_data_mat-np.array(los_zoa)[:,None], feature='zoa')
+    zod_img_model = get_pdfs(dist2d_array, ZOD_model_mat-np.array(los_zod)[:,None], feature='zod')
+    zod_img_data = get_pdfs(dist2d_array, ZOD_data_mat-np.array(los_zod)[:,None], feature='zod')
+    
+    np.savetxt(f'data/zenith_angles/zod_{height}_model.txt', zod_img_model)
+    np.savetxt(f'data/zenith_angles/zod_{height}_data.txt', zod_img_data)
+    np.savetxt(f'data/zenith_angles/zoa_{height}_model.txt', zoa_img_model)
+    np.savetxt(f'data/zenith_angles/zoa_{height}_data.txt', zoa_img_data)
+    
+    np.savetxt(f'data/azimuth_angles/aod_{height}_model.txt', aod_model)
+    np.savetxt(f'data/azimuth_angles/aod_{height}_data.txt', aod_data)
+    np.savetxt(f'data/azimuth_angles/aoa_{height}_model.txt', aoa_model)
+    np.savetxt(f'data/azimuth_angles/aoa_{height}_data.txt', aoa_data)
+    np.savetxt(f'data/azimuth_angles/phase_{height}_model.txt', phase_model)
+    np.savetxt(f'data/azimuth_angles/phase_{height}_data.txt', phase_data)
+    
+    np.savetxt(f'data/RMS/delay_rms_{height}_data.txt', dly_rms_data)
+    np.savetxt(f'data/RMS/delay_rms_{height}_model.txt', dly_rms_model)
+    
+    np.savetxt(f'data/RMS/aod_rms_{height}_data.txt', aod_rms_data)
+    np.savetxt(f'data/RMS/aod_rms_{height}_model.txt', aod_rms_model)
+    
+    np.savetxt(f'data/RMS/aoa_rms_{height}_data.txt', aoa_rms_data)
+    np.savetxt(f'data/RMS/aoa_rms_{height}_model.txt', aoa_rms_model)
