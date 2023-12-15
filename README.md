@@ -1,7 +1,7 @@
 # A Geometry-based Stochastic Wireless Channel Model using Channel Images
 
  ### In this work, we obtain channel parameters from the ray-tracing simulation in a specific area and process them in the form of images to train any generative model.
-### All the detailed description is in the paper, [https://arxiv.org/abs/2312.06637]
+### All the detailed description is in the paper, [A Geometry-based Stochastic Wireless Channel Model using Channel Images](https://arxiv.org/abs/2312.06637)
 # Channel Image Generation and Model Training
 
 ### Firstly, we obtain channel parameters from ray-tracing simulate and create the matrices $\boldsymbol{D}$ corresponding to each Tx-Rx link. 
