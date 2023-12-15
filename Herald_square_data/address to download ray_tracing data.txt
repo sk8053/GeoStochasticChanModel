@@ -1,3 +1,5 @@
 All ray-tracing data can be downloaded from the below link
 
 https://drive.google.com/drive/u/0/folders/18n1B0HgLFmb1jy2hIDPJkvPH30tr42pl?q=sharedwith:public%20parent:18n1B0HgLFmb1jy2hIDPJkvPH30tr42pl
+
+*** height values are relative to sea level ***
