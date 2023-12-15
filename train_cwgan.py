@@ -27,7 +27,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(device)
 
 load = False
-lr = 1e-5 # learning rate
+lr = 1e-5 # learning rate or you can set it as 5*1e-5. 
 
 img_size = [64, 50]
 img_channel = 1
