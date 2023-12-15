@@ -3,6 +3,9 @@
 Created on Mon Nov  6 21:10:44 2023
 
 @author: seongjoon kang
+# this code is to find minimum and maximum values across all the parsed csv files. (across all the heights)
+# this code will save min and max values of each feature data as json file
+# this min and max values will be used to normalize the raw data or to recover data from output of the model
 """
 import pandas as pd
 import glob
