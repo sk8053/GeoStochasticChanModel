@@ -17,8 +17,13 @@ fig, axs = plt.subplots(2,5, figsize = (10,2.5))
 feature = 'zod'
 for i, height in enumerate([1.6, 30, 60, 90, 120]):#, 30, 60, 90, 120]:
 <<<<<<< HEAD
+<<<<<<< HEAD
     _data = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_data.txt')
     _model = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_model.txt')
+=======
+    zoa_data = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_data.txt')
+    zoa_model = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_model.txt')
+>>>>>>> 84d659aea2aa01a98c8a2a39f6f81e055888473b
 =======
     zoa_data = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_data.txt')
     zoa_model = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_model.txt')
