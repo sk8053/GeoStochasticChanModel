@@ -14,23 +14,23 @@ plt.rcParams["font.family"] = "Times New Roman"
 import numpy as np
 
 fig, axs = plt.subplots(2,5, figsize = (10,2.5))
-feature = 'zoa'
+feature = 'zod'
 for i, height in enumerate([1.6, 30, 60, 90, 120]):#, 30, 60, 90, 120]:
-    zoa_data = np.loadtxt(f'data/zenith_angles/{feature}_{height}_data.txt')
-    zoa_model = np.loadtxt(f'data/zenith_angles/{feature}_{height}_model.txt')
+    _data = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_data.txt')
+    _model = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_model.txt')
     
-    zoa_data = zoa_data[10:-10][:,:60]
-    zoa_model = zoa_model[10:-10][:,:60]
+    _data = _data[10:-10][:,:60]
+    _model = _model[10:-10][:,:60]
     
     
     #fig.suptitle('Vertically stacked subplots')
     
-    pcm = axs[0,i].imshow(zoa_data, cmap='jet', vmax = 0.1)
+    pcm = axs[0,i].imshow(_data, cmap='jet', vmax = 0.1)
     
     axs[0,i].set_xticks([])#(np.arange(zoa_data.shape[1]+1, step=20), np.arange(1300, step=200)) 
     axs[0,i].set_title(f'Data at {height}m', fontsize = 12)
     
-    pcm = axs[1,i].imshow(zoa_model, cmap='jet', vmax = 0.1)
+    pcm = axs[1,i].imshow(_model, cmap='jet', vmax = 0.1)
     
     axs[0,i].set_yticks(np.array([ 0, 9, 19, 29, 39]), np.arange(-60,60+30, step=30))
     axs[1,i].set_yticks(np.array([ 0, 9, 19, 29, 39]), np.arange(-60,60+30, step=30))
@@ -58,4 +58,4 @@ for i, height in enumerate([1.6, 30, 60, 90, 120]):#, 30, 60, 90, 120]:
                  va='center',rotation = 'vertical', fontsize = 12, weight = 'bold')
 
 
-plt.savefig(f'data/figures/all_{feature}.png', dpi = 800, bbox_inches='tight')
+plt.savefig(f'evaluation_data/figures/all_{feature}.png', dpi = 800, bbox_inches='tight')

@@ -17,7 +17,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 batch_size = 5000 # batch size to sample from trained model
 height = 120 # height of receiver
 height_i = np.repeat([height], batch_size)
-test = True
+test = False
 pathloss_threshold = 180 # pathloss value to determine link outage
 max_n_path = 25 # maximum number of multipaths
 #dist2d_max = 1250
@@ -77,4 +77,4 @@ if test == True:
     plt.ylabel('Pathloss [dB]')
     plt.title (f'height = {height} m')
     plt.legend()
-    plt.savefig(f'data/test_images/distance_vs_pathloss at {height}m.png')
+    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')

@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 batch_size = 5000
-height = 1.6
+height = 120
 pathloss_threshold = 180
 max_n_path = 25
 #dist2d_max = 1250
@@ -116,6 +116,9 @@ dly_rms_model, dly_rms_data = [],[]
 aod_rms_model, aod_rms_data = [], []
 aoa_rms_model, aoa_rms_data = [], []
 
+#pl_1path_model, pl_1path_data = [], []
+#dly_1path_model, dly_1path_data = [], []
+
 for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_list_data)):
     
     if len(chan_model['path_loss']) ==0:
@@ -130,7 +133,10 @@ for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_
         _aod_rms_model = compute_rms_spread(chan_model, feature='aod')
         aod_rms_model.append(_aod_rms_model)
         
-        
+        #if len(chan_model['path_loss']) >=2:
+        #pl_1path_model.append(chan_model['path_loss'][0])
+        #dly_1path_model.append(chan_model['delay'][0])
+    
     if len(chan_data['path_loss']) ==0:
         outage_state_data[i] =1
     else:
@@ -142,6 +148,10 @@ for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_
         
         _aod_rms_data = compute_rms_spread(chan_model, feature='aod')
         aod_rms_data.append(_aod_rms_data)
+        
+        #if len(chan_data['path_loss']) >= 2:
+        #pl_1path_data.append(chan_data['path_loss'][0])
+        #dly_1path_data.append(chan_data['delay'][0])
     
         
     pathloss_list_model+= chan_model['path_loss']
@@ -169,8 +179,6 @@ for i, (chan_model, chan_data) in enumerate(zip(chan_dict_list_model, chan_dict_
     phase_data += chan_data['phase']
     
     
-        
-    
     
 dist2d_array= np.array(dist2d_list)
 
@@ -180,6 +188,20 @@ los_prob_data = compute_linkstate_prob(linkstate_list_data, dist2d_array)
 # outage probability 
 outage_prob_model = compute_linkstate_prob(outage_state_model, dist2d_array, enable_first_prob=False)
 outage_prob_data = compute_linkstate_prob(outage_state_data, dist2d_array, enable_first_prob=False)
+
+'''
+plt.figure()
+plt.plot(np.sort(pl_1path_data), np.linspace(0,1,len(pl_1path_data)), label = 'data')
+plt.plot(np.sort(pl_1path_model), np.linspace(0,1,len(pl_1path_model)), label = 'model')
+plt.title(f'Pathloss, height = {height}m')
+plt.legend()
+
+plt.figure()
+plt.plot(np.sort(dly_1path_data), np.linspace(0,1,len(dly_1path_data)), label = 'data')
+plt.plot(np.sort(dly_1path_model), np.linspace(0,1,len(dly_1path_model)), label = 'model')
+plt.legend()
+plt.title(f'Delay, height = {height}m')
+
 
 plt.figure()
 plt.plot(np.sort(dly_rms_data), np.linspace(0,1,len(dly_rms_data)), label = 'data')
@@ -192,24 +214,35 @@ plt.plot(np.sort(aoa_rms_data), np.linspace(0,1,len(dly_rms_data)), label = 'dat
 plt.plot(np.sort(aoa_rms_model), np.linspace(0,1,len(dly_rms_model)), label = 'model')
 plt.title(f'AOA, height = {height}m')
 plt.legend()
-
+'''
 plt.figure()
-plt.plot(np.sort(aod_rms_data), np.linspace(0,1,len(dly_rms_data)), label = 'data')
-plt.plot(np.sort(aod_rms_model), np.linspace(0,1,len(dly_rms_model)), label = 'model')
-plt.title(f'AOD, height = {height}m')
+plt.plot(np.sort(pathloss_list_data), np.linspace(0,1,len(pathloss_list_data)), label = 'data')
+plt.plot(np.sort(pathloss_list_model), np.linspace(0,1,len(pathloss_list_model)), label = 'model')
+plt.title(f'Pathloss, height = {height}m')
 plt.legend()
+    
 if 0:
-    np.savetxt(f'data/path_loss/path_loss_{height}_model.txt', pathloss_list_model)
-    np.savetxt(f'data/path_loss/path_loss_{height}_data.txt', pathloss_list_data)
+
     
-    np.savetxt(f'data/delay/delay_{height}_model.txt', delay_list_model)
-    np.savetxt(f'data/delay/delay_{height}_data.txt', delay_list_data)
+    np.savetxt(f'evaluation_data/path_loss/path_loss_{height}_model.txt', pathloss_list_model)
+    np.savetxt(f'evaluation_data/path_loss/path_loss_{height}_data.txt', pathloss_list_data)
     
-    np.savetxt(f'data/link state/link state_{height}_model.txt', los_prob_model)
-    np.savetxt(f'data/link state/link state_{height}_data.txt', los_prob_data)
+    #np.savetxt(f'data/path_loss/first_pl_{height}_model.txt', pl_1path_model)
+    #np.savetxt(f'data/path_loss/first_pl_{height}_data.txt', pl_1path_data)
     
-    np.savetxt(f'data/link state/outage state_{height}_model.txt', outage_prob_model)
-    np.savetxt(f'data/link state/outage state_{height}_data.txt', outage_prob_data)
+    
+    np.savetxt(f'evaluation_data/delay/delay_{height}_model.txt', delay_list_model)
+    np.savetxt(f'evaluation_data/delay/delay_{height}_data.txt', delay_list_data)
+    
+    #np.savetxt(f'data/delay/first_delay_{height}_model.txt', dly_1path_model)
+    #np.savetxt(f'data/delay/first_delay_{height}_data.txt', dly_1path_data)
+    
+    
+    np.savetxt(f'evaluation_data/link state/link state_{height}_model.txt', los_prob_model)
+    np.savetxt(f'evaluation_data/link state/link state_{height}_data.txt', los_prob_data)
+    
+    np.savetxt(f'evaluation_data/link state/outage state_{height}_model.txt', outage_prob_model)
+    np.savetxt(f'evaluation_data/link state/outage state_{height}_data.txt', outage_prob_data)
     
     
     zoa_img_model = get_pdfs(dist2d_array, ZOA_model_mat-np.array(los_zoa)[:,None], feature='zoa')
@@ -217,23 +250,23 @@ if 0:
     zod_img_model = get_pdfs(dist2d_array, ZOD_model_mat-np.array(los_zod)[:,None], feature='zod')
     zod_img_data = get_pdfs(dist2d_array, ZOD_data_mat-np.array(los_zod)[:,None], feature='zod')
     
-    np.savetxt(f'data/zenith_angles/zod_{height}_model.txt', zod_img_model)
-    np.savetxt(f'data/zenith_angles/zod_{height}_data.txt', zod_img_data)
-    np.savetxt(f'data/zenith_angles/zoa_{height}_model.txt', zoa_img_model)
-    np.savetxt(f'data/zenith_angles/zoa_{height}_data.txt', zoa_img_data)
+    np.savetxt(f'evaluation_data/zenith_angles/zod_{height}_model.txt', zod_img_model)
+    np.savetxt(f'evaluation_data/zenith_angles/zod_{height}_data.txt', zod_img_data)
+    np.savetxt(f'evaluation_data/zenith_angles/zoa_{height}_model.txt', zoa_img_model)
+    np.savetxt(f'evaluation_data/zenith_angles/zoa_{height}_data.txt', zoa_img_data)
     
-    np.savetxt(f'data/azimuth_angles/aod_{height}_model.txt', aod_model)
-    np.savetxt(f'data/azimuth_angles/aod_{height}_data.txt', aod_data)
-    np.savetxt(f'data/azimuth_angles/aoa_{height}_model.txt', aoa_model)
-    np.savetxt(f'data/azimuth_angles/aoa_{height}_data.txt', aoa_data)
-    np.savetxt(f'data/azimuth_angles/phase_{height}_model.txt', phase_model)
-    np.savetxt(f'data/azimuth_angles/phase_{height}_data.txt', phase_data)
+    np.savetxt(f'evaluation_data/azimuth_angles/aod_{height}_model.txt', aod_model)
+    np.savetxt(f'evaluation_data/azimuth_angles/aod_{height}_data.txt', aod_data)
+    np.savetxt(f'evaluation_data/azimuth_angles/aoa_{height}_model.txt', aoa_model)
+    np.savetxt(f'evaluation_data/azimuth_angles/aoa_{height}_data.txt', aoa_data)
+    np.savetxt(f'evaluation_data/azimuth_angles/phase_{height}_model.txt', phase_model)
+    np.savetxt(f'evaluation_data/azimuth_angles/phase_{height}_data.txt', phase_data)
     
-    np.savetxt(f'data/RMS/delay_rms_{height}_data.txt', dly_rms_data)
-    np.savetxt(f'data/RMS/delay_rms_{height}_model.txt', dly_rms_model)
+    np.savetxt(f'evaluation_data/RMS/delay_rms_{height}_data.txt', dly_rms_data)
+    np.savetxt(f'evaluation_data/RMS/delay_rms_{height}_model.txt', dly_rms_model)
     
-    np.savetxt(f'data/RMS/aod_rms_{height}_data.txt', aod_rms_data)
-    np.savetxt(f'data/RMS/aod_rms_{height}_model.txt', aod_rms_model)
+    np.savetxt(f'evaluation_data/RMS/aod_rms_{height}_data.txt', aod_rms_data)
+    np.savetxt(f'evaluation_data/RMS/aod_rms_{height}_model.txt', aod_rms_model)
     
-    np.savetxt(f'data/RMS/aoa_rms_{height}_data.txt', aoa_rms_data)
-    np.savetxt(f'data/RMS/aoa_rms_{height}_model.txt', aoa_rms_model)
+    np.savetxt(f'evaluation_data/RMS/aoa_rms_{height}_data.txt', aoa_rms_data)
+    np.savetxt(f'evaluation_data/RMS/aoa_rms_{height}_model.txt', aoa_rms_model)
