@@ -16,8 +16,8 @@ import numpy as np
 fig, axs = plt.subplots(2,5, figsize = (10,2.5))
 feature = 'zoa'
 for i, height in enumerate([1.6, 30, 60, 90, 120]):#, 30, 60, 90, 120]:
-    zoa_data = np.loadtxt(f'data/zenith_angles/{feature}_{height}_data.txt')
-    zoa_model = np.loadtxt(f'data/zenith_angles/{feature}_{height}_model.txt')
+    zoa_data = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_data.txt')
+    zoa_model = np.loadtxt(f'evaluation_data/zenith_angles/{feature}_{height}_model.txt')
     
     zoa_data = zoa_data[10:-10][:,:60]
     zoa_model = zoa_model[10:-10][:,:60]
