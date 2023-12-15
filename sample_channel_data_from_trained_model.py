@@ -78,5 +78,9 @@ if test == True:
     plt.ylabel('Pathloss [dB]', fontsize = 13)
     plt.title (f'height = {height} m', fontsize = 13)
     plt.legend()
+<<<<<<< HEAD
     plt.grid()
     plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png', dpi = 600)
+=======
+    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')
+>>>>>>> d72caa922b53a2dcee0d3bb3f596c5b39821bbb6
