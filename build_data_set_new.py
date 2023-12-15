@@ -3,6 +3,10 @@
 Created on Tue Oct 31 11:03:00 2023
 
 @author: seongjoon kang
+# this code performs the normalization of data so that the range of values would be from -1 to 1. 
+# to do this, the code reads min and max values from the directory, Herald_square_data. 
+# for pathloss and propagation delay, additional process is needed as mentioned in the paper. 
+# (substract FSPL and minimum delay, multiply 10^7 for delay values)
 """
 
 import numpy as np
