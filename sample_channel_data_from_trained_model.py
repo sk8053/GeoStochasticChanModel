@@ -12,12 +12,13 @@ import torch
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+plt.rcParams["font.family"] = "Times New Roman"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 batch_size = 5000 # batch size to sample from trained model
 height = 120 # height of receiver
 height_i = np.repeat([height], batch_size)
-test = False
+test = True
 pathloss_threshold = 180 # pathloss value to determine link outage
 max_n_path = 25 # maximum number of multipaths
 #dist2d_max = 1250
@@ -71,18 +72,11 @@ if test == True:
     
     fspl = 20*np.log10(dist3d_list_new) + 20*np.log10(freq) -147.55
     plt.figure()        
-    plt.scatter(dist3d_list_new, path_loss_list, label = 'data')
-    plt.scatter(dist3d_list_new, fspl, label = 'FSPL')
-    plt.xlabel('3D distance [m]')
-    plt.ylabel('Pathloss [dB]')
-    plt.title (f'height = {height} m')
+    plt.scatter(dist3d_list_new, path_loss_list, label = 'pathloss from model', s= 5)
+    plt.scatter(dist3d_list_new, fspl, label = 'FSPL',s = 5)
+    plt.xlabel('3D distance [m]', fontsize = 13)
+    plt.ylabel('Pathloss [dB]', fontsize = 13)
+    plt.title (f'height = {height} m', fontsize = 13)
     plt.legend()
-<<<<<<< HEAD
-<<<<<<< HEAD
-    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')
-=======
-    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')
->>>>>>> 84d659aea2aa01a98c8a2a39f6f81e055888473b
-=======
-    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')
->>>>>>> 84d659aea2aa01a98c8a2a39f6f81e055888473b
+    plt.grid()
+    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png', dpi = 600)
