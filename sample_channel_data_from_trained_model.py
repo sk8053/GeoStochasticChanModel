@@ -77,12 +77,4 @@ if test == True:
     plt.ylabel('Pathloss [dB]')
     plt.title (f'height = {height} m')
     plt.legend()
-<<<<<<< HEAD
-<<<<<<< HEAD
     plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')
-=======
-    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')
->>>>>>> 84d659aea2aa01a98c8a2a39f6f81e055888473b
-=======
-    plt.savefig(f'evaluation_data/test_images/distance_vs_pathloss at {height}m.png')
->>>>>>> 84d659aea2aa01a98c8a2a39f6f81e055888473b
