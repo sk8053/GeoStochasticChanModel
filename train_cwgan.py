@@ -186,18 +186,18 @@ for epoch in range(n_epoch):
                 writer_fake.add_image("Fake", img_grid_fake, global_step=step)
                 
                 
-                plt.figure(figsize = (4,18))
-                fakes = fake[:16]
-                for j in range(16):
-                    plt.subplot(8,2, j+1)
-                    plt.imshow(fakes[j].detach().cpu().numpy().squeeze())
-                    plt.yticks([])
-                    plt.xticks([])
+                #plt.figure(figsize = (4,18))
+                #fakes = fake[:16]
+                #for j in range(16):
+                    #plt.subplot(8,2, j+1)
+                    #plt.imshow(fakes[j].detach().cpu().numpy().squeeze())
+                    #plt.yticks([])
+                    #plt.xticks([])
                     #ax.autoscale(True)
-                plt.subplots_adjust()
-                plt.tight_layout()    
-                plt.savefig(f'logs_figures/{epoch+1}_{batch_idx}.png')
-                plt.close()
+                #plt.subplots_adjust()
+                #plt.tight_layout()    
+                #plt.savefig(f'logs_figures/{epoch+1}_{batch_idx}.png')
+                #plt.close()
 
             step += 1
             gen.train()
