@@ -2,7 +2,7 @@
 """
 Created on Sat Feb  4 15:36:41 2023
 
-@author: gangs
+@author: seongjoon kang
 """
 
 import torch
