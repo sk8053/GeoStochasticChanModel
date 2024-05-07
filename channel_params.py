@@ -87,8 +87,8 @@ class Channel_Params:
                     # order multipath channel params by pathloss and 
                     # take only paths satisfying the pathloss threshold
                     # 1) I2: sort based on pathloss 2) I: cut pathloss values exceeding threshold
-                    mpath_comp = data_mat[j,k][I] 
-                    #mpath_comp = data_mat[j,k][I2][I] 
+                    #mpath_comp = data_mat[j,k][I] 
+                    mpath_comp = data_mat[j,k][I2][I] 
                     
                     if len(mpath_comp) !=0 and dist_vec != None:                
                         mpath_comp[0] = los_dict[key][0]
@@ -103,8 +103,8 @@ class Channel_Params:
                     # order multipath channel params based on delay and 
                     # take only paths satisfying the pathloss threshold
                     # 1) I2: sort based on pathloss 2) I: cut pathloss values exceeding threshold
-                    mpath_comp = data_mat[j,k][I]
-                    #mpath_comp = data_mat[j,k][I2][I]
+                    #mpath_comp = data_mat[j,k][I]
+                    mpath_comp = data_mat[j,k][I2][I]
                     chan_dict[key] = list(mpath_comp)
             
             chan_dict_list.append(chan_dict)
