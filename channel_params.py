@@ -68,7 +68,7 @@ class Channel_Params:
             # sort multi-path components based by pathloss
             I2 = np.argsort(path_loss_) 
             # cut multipath based on pathloss threshold
-            I = data_mat[j,0][I2]<path_loss_threshold
+            I = data_mat[j,0]<path_loss_threshold
             
             # calculate the link state value by averaging the last raw
             ls = np.mean(data_mat[j, feature_dict['link state']])
@@ -86,7 +86,9 @@ class Channel_Params:
                     k = feature_dict[key]
                     # order multipath channel params by pathloss and 
                     # take only paths satisfying the pathloss threshold
-                    mpath_comp = data_mat[j,k][I2][I] # 1) I2: sort based on pathloss 2) I: cut pathloss values exceeding threshold
+                    # 1) I2: sort based on pathloss 2) I: cut pathloss values exceeding threshold
+                    mpath_comp = data_mat[j,k][I] 
+                    #mpath_comp = data_mat[j,k][I2][I] 
                     
                     if len(mpath_comp) !=0 and dist_vec != None:                
                         mpath_comp[0] = los_dict[key][0]
@@ -100,7 +102,9 @@ class Channel_Params:
                     k = feature_dict[key]
                     # order multipath channel params based on delay and 
                     # take only paths satisfying the pathloss threshold
-                    mpath_comp = data_mat[j,k][I2][I]
+                    # 1) I2: sort based on pathloss 2) I: cut pathloss values exceeding threshold
+                    mpath_comp = data_mat[j,k][I]
+                    #mpath_comp = data_mat[j,k][I2][I]
                     chan_dict[key] = list(mpath_comp)
             
             chan_dict_list.append(chan_dict)
