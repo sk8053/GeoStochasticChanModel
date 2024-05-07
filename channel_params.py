@@ -63,9 +63,10 @@ class Channel_Params:
             keys = list(feature_dict.keys())
            
             chan_dict = dict()     
-            dly_ = data_mat[j,1]
-            # sort multi-path components based on delay
-            I2 = np.argsort(dly_) 
+            path_loss_ = data_mat[j,0]
+           
+            # sort multi-path components based by pathloss
+            I2 = np.argsort(path_loss_) 
             # cut multipath based on pathloss threshold
             I = data_mat[j,0][I2]<path_loss_threshold
             
@@ -83,9 +84,9 @@ class Channel_Params:
                 
                 for key in keys:
                     k = feature_dict[key]
-                    # order multipath channel params based on delay and 
+                    # order multipath channel params by pathloss and 
                     # take only paths satisfying the pathloss threshold
-                    mpath_comp = data_mat[j,k][I2][I] # 1) sort based on delay 2) cut pathloss values exceeding threshold
+                    mpath_comp = data_mat[j,k][I2][I] # 1) I2: sort based on pathloss 2) I: cut pathloss values exceeding threshold
                     
                     if len(mpath_comp) !=0 and dist_vec != None:                
                         mpath_comp[0] = los_dict[key][0]
