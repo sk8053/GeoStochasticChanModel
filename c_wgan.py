@@ -19,11 +19,11 @@ class Critic(nn.Module):
         self.img_size = img_size
         self.critic = nn.Sequential(
             # Input: N x channels
-            self._conv_block(channels_img+1, features_c*2, 3, 2, 1), 
-            self._conv_block(features_c*2, features_c*4, 4, 2, 1), # 1/2
-            self._conv_block(features_c*4, 8*features_c, 4, 2, 1), # 1/2
-            self._conv_block(features_c*8, 16*features_c, 4, 2, 1), #1/2
-            self._conv_block(features_c*16,1,  4, 2, 1, disable_norm_act=True, is_bias=True), 
+            self._conv_block(channels_img+1, features_c*2, 4, 2, 1), #1/2 [32, 25]     
+            self._conv_block(features_c*2, features_c*4, 4, 2, 1), # 1/2 [16, 12]
+            self._conv_block(features_c*4, 8*features_c, 4, 2, 1), # 1/2 [8, 6]
+            self._conv_block(features_c*8, 16*features_c, 4, 2, 1), #1/2 [4,3]
+            self._conv_block(features_c*16,1,  [6,4], 2, 1, disable_norm_act=True, is_bias=True), 
             )
     def _conv_block(self, in_channels, out_channels, kernel_size, stride, padding, 
                     disable_norm_act = False, is_bias = False):
@@ -43,6 +43,7 @@ class Critic(nn.Module):
         _cond = self.fc(cond)
         _cond = _cond.reshape(-1,1,self.img_size[0],self.img_size[1])
         x = torch.concat([x,_cond], dim=1)
+        
         return self.critic(x)
     
 class Generator(nn.Module):
