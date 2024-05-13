@@ -18,6 +18,7 @@ import pickle
 import matplotlib.pyplot as plt
 import os
 import shutil
+from Herald_square_data.download_data import download_data
 #from torch.optim.lr_scheduler import ExponentialLR
 
 if os.path.exists('logs'):
@@ -42,10 +43,15 @@ vertical_repeats = 8
 horizontal_repeats = 2
 
 data_dir = 'Herald_square_data'
-saved_loc = f'save_model/cwgan_z_{z_dim}.pt'
+saved_loc = f'save_model/cwgan_z_{z_dim}_new.pt'
 
+file_path = f'{data_dir}/data_total.pickle'
+
+if os.path.isfile(file_path) is False:
+    download_data(pre_processed_only = True)
 # read data
-with open(f'{data_dir}/data_total.pickle','rb') as f:
+with open(file_path,'rb') as f:
+    print('----- training data will be downloading -----')
     dataset = pickle.load(f)
 img_size = [dataset.shape[-2]*vertical_repeats, 
             dataset.shape[-1]*horizontal_repeats]
