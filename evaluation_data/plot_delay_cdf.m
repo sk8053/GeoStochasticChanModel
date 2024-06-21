@@ -35,7 +35,10 @@ for j=1:length(heights)
     
         set(gca,'fontname','times');
         set(gca,'fontweight','bold');
-        ylabel('CDF', 'FontSize',17);
+        
+        if height == 1.6
+            ylabel('CDF', 'FontSize',17);
+        end
         
         set(h1, 'LineWidth',2.0);
         set(h1, 'Color', 'blue');
