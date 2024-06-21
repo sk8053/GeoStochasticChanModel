@@ -60,7 +60,12 @@ for j=1:length(heights)
             save_file_name_png = sprintf('figures//delay_%dm.png', height);
             save_file_name_eps = sprintf('figures//delay_%dm.eps', height);
         end
-    
+        
+        if height == 120
+                h = legend([h1, h2], 'model', 'data', ...
+                'Location', 'southeast', 'fontweight','bold','fontname', 'times', 'fontsize', 15, 'NumColumns', 1);
+        end
+
         if eps == true
             exportgraphics(gcf,save_file_name_eps);
         else
