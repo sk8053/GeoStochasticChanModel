@@ -5,8 +5,8 @@ root_path = os.path.dirname(os.path.abspath(__file__))#.split('/')[0]
 
 def download_data(pre_processed_only = False):
     if pre_processed_only is True:
-        url_processed_data ={'data_total':'https://drive.google.com/file/d/1k7WwUR-L8yHT3I-nEJnr6UUDmpkdOBgu/view?usp=drive_link',
-                            'cond_total': 'https://drive.google.com/file/d/18eT5eP2VsjoGj00UDKyIvs-oCFGvSKTu/view?usp=drive_link'
+        url_processed_data ={'data_total':'https://drive.google.com/file/d/16ezCkaa2F1QXK8p_QlYSxgrLB2VtgUvj/view?usp=drive_link',
+                            'cond_total': 'https://drive.google.com/file/d/1YScuPDPhaYTr7ed21kNeS74dSjP02Bot/view?usp=drive_link'
                             }
         for d in url_processed_data.keys():
             output_path = os.path.join(root_path, f'{d}.pickle')
@@ -16,8 +16,8 @@ def download_data(pre_processed_only = False):
                 gdown.download(url, output_path, quiet=False,fuzzy=True)
     
     else:
-        url_processed_data ={'data_total':'https://drive.google.com/file/d/1k7WwUR-L8yHT3I-nEJnr6UUDmpkdOBgu/view?usp=drive_link',
-                            'cond_total': 'https://drive.google.com/file/d/18eT5eP2VsjoGj00UDKyIvs-oCFGvSKTu/view?usp=drive_link'
+        url_processed_data ={'data_total':'https://drive.google.com/file/d/16ezCkaa2F1QXK8p_QlYSxgrLB2VtgUvj/view?usp=drive_link',
+                            'cond_total': 'https://drive.google.com/file/d/1YScuPDPhaYTr7ed21kNeS74dSjP02Bot/view?usp=drive_link'
                             }
         for d in url_processed_data.keys():
             output_path = os.path.join(root_path, d)
@@ -26,11 +26,11 @@ def download_data(pre_processed_only = False):
                 url = url_processed_data[d]
                 gdown.download(url, output_path, quiet=False,fuzzy=True)
         
-        url_map= {1.6:'https://drive.google.com/file/d/1NHTucZeNXiH-ewwpjUZh_wF6hqEN4ubx/view?usp=drive_link',
-            30: 'https://drive.google.com/file/d/1WfANZpFmo369QNVytjNAlMubT-zCjcax/view?usp=drive_link',
-            60: 'https://drive.google.com/file/d/1zMlfO9vNotMwt1i3rI6EYRFGOUEmJcsQ/view?usp=drive_link',
-            90: 'https://drive.google.com/file/d/1Ct-OKw2lOwicLxFszkByaZF6Kiaj0PoN/view?usp=drive_link',
-            120:'https://drive.google.com/file/d/1VseGBgbMi_GbOK0vGJ9w3R48MGYEvWjC/view?usp=drive_link'
+        url_map= {1.6:'https://drive.google.com/file/d/1ruPwB9ovEYhENSVIghpWRcqqX1SqBdSW/view?usp=drive_link',
+            30: 'https://drive.google.com/file/d/1cRdI2ssR5M9H2oFvCSYXZKegG2scp9yS/view?usp=drive_link',
+            60: 'https://drive.google.com/file/d/19eIunR1EasAHd1_7cekTtZ0lTdSUhwAE/view?usp=drive_link',
+            90: 'https://drive.google.com/file/d/1hVVcQSsRKD6jnUzYFIKFtDAB0MsRaNlW/view?usp=drive_link',
+            120:'https://drive.google.com/file/d/1YzYC60_9w2m9dSfcc8UivIbcbQ9dxUO3/view?usp=drive_link'
             }
 
         for height in [1.6, 30, 60, 90, 120]:
