@@ -2,8 +2,9 @@
 
  ### In this work, we obtain channel parameters from the ray-tracing simulation in a specific area and process them in the form of images to train any generative model.
 ### For the detailed descriptions of this implementation, we kindly suggest to read the paper, [A Geometry-based Stochastic Wireless Channel Model using Channel Images](https://arxiv.org/abs/2312.06637)
+### Extended decription -> [Geometry-based Stochastic Wireless Channel Model using Generative Neural Networks](https://www.techrxiv.org/doi/full/10.36227/techrxiv.172114994.43396874)
+
 # Channel Image Generation and Model Training
-### Extended decription [Geometry-based Stochastic Wireless Channel Model using Generative Neural Networks][https://www.techrxiv.org/doi/full/10.36227/techrxiv.172114994.43396874]
 
 ### Firstly, we obtain channel parameters from ray-tracing simulate and create the matrices $\boldsymbol{D}$ corresponding to each Tx-Rx link. 
 ![ray_matrix](https://github.com/sk8053/GeoStochasticChanModel/assets/59175938/6322f387-f304-459d-ab16-583da47d369c)
