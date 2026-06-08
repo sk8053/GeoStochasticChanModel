@@ -34,7 +34,10 @@ def download_data(pre_processed_only = False):
             }
 
         for height in [1.6, 30, 60, 90, 120]:
-            output_path = os.path.join(root_path, f'bs_{height}m.csv')
+            if height == 1.6:
+              output_path = os.path.join(root_path, 'bs_1_6m.csv')
+            else:
+              output_path = os.path.join(root_path, f'bs_{height}m.csv')
             if os.path.isfile(output_path) is False:
                 print(f'++++++++++++++++++++++ Download csv files at height = {height} from google drive ++++++++++++++ ')
                 url = url_map[height]
