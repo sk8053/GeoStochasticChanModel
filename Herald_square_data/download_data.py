@@ -13,7 +13,7 @@ def download_data(pre_processed_only = False):
             if os.path.isfile(output_path) is False:
                 print(f'++++++++++++++++++++++ Download csv files for {d} from google drive ++++++++++++++ ')
                 url = url_processed_data[d]
-                gdown.download(url, output_path, quiet=False,fuzzy=True)
+                gdown.download(url, output_path, quiet=False) # fuzzy= True is removed
     
     else:
         url_processed_data ={'data_total':'https://drive.google.com/file/d/16ezCkaa2F1QXK8p_QlYSxgrLB2VtgUvj/view?usp=drive_link',
@@ -24,7 +24,7 @@ def download_data(pre_processed_only = False):
             if os.path.isfile(output_path) is False:
                 print(f'++++++++++++++++++++++ Download csv files for {d} from google drive ++++++++++++++ ')
                 url = url_processed_data[d]
-                gdown.download(url, output_path, quiet=False,fuzzy=True)
+                gdown.download(url, output_path, quiet=False) # ,fuzzy=True is removed
         
         url_map= {1.6:'https://drive.google.com/file/d/1ruPwB9ovEYhENSVIghpWRcqqX1SqBdSW/view?usp=drive_link',
             30: 'https://drive.google.com/file/d/1cRdI2ssR5M9H2oFvCSYXZKegG2scp9yS/view?usp=drive_link',
@@ -38,6 +38,6 @@ def download_data(pre_processed_only = False):
             if os.path.isfile(output_path) is False:
                 print(f'++++++++++++++++++++++ Download csv files at height = {height} from google drive ++++++++++++++ ')
                 url = url_map[height]
-                gdown.download(url, output_path, quiet=False,fuzzy=True)
+                gdown.download(url, output_path, quiet=False) # ,fuzzy=True removed
         
         
