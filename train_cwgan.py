@@ -141,6 +141,7 @@ for epoch in range(n_epoch):
         real = real.to(device, dtype = torch.float)
         real = torch.repeat_interleave(real, vertical_repeats, dim = -2)
         real = torch.repeat_interleave(real, horizontal_repeats, dim = -1) # 64*50
+        real =  torch.repeat_interleave(real, horizontal_repeats, dim = -1) # img_chan*64*50
         batch_size_now = real.shape[0]
        
         # Train Critic: max E[critic(real)] - E[critic(fake)]
