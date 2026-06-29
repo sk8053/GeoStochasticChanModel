@@ -183,10 +183,10 @@ for epoch in range(n_epoch):
                 # take out (up to) 32 examples
                 img_grid_real = torchvision.utils.make_grid(
                     real[:32], normalize=True
-                )
+                ) ## real[:32, 1:2, :,:] if img_channel >1
                 img_grid_fake = torchvision.utils.make_grid(
                     fake[:32], normalize=True
-                )
+                )  ## fake[:32, 1:2, :,:] if img_channel >1
                 
                 
                 writer_real.add_image("Real", img_grid_real, global_step=step)
