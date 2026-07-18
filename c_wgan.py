@@ -90,6 +90,18 @@ def initialize_weight(model):
         if isinstance(m, (nn.Conv2d,nn.ConvTranspose2d,nn.BatchNorm2d)):
             nn.init.normal_(m.weight.data, 0.0, 0.01)
             
+def upsample(x, vertical_repeats=8, horizontal_repeats=2, img_channel =3):
+    """Spatial repeat (8x vertical, 2x horizontal) + channel expand.
+ 
+    The three channels are identical, so expand() creates a view instead
+    of physically copying the data; .contiguous() materializes the layout
+    once for stable conv performance.
+    """
+    x = torch.repeat_interleave(x, vertical_repeats, dim=-2)
+    x = torch.repeat_interleave(x, horizontal_repeats, dim=-1)
+    x = x.expand(-1, img_channel, -1, -1).contiguous()
+    return x
+
 def embedder (x, length =10):
     L= -1*(torch.arange(length)-1)
     r_1 = torch.sin(x*torch.pi*2**L)[:,None]
