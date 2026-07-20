@@ -31,7 +31,7 @@ print(f'############### run name : {init_run_name} ###############')
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--load_model", action="store_true")
-parser.add_argument("--num_bins", type=int, default=32,
+parser.add_argument("--num_bins", type=int, default=16,
                     help="number of uniform bins N over the 2D distance range (must be even)")
 
 parser.add_argument("--batch_size", type=int, default=256,
@@ -146,7 +146,8 @@ ang = np.rad2deg(ang)
 cond = np.column_stack((cond_data_0[:,0]/1000,cond_data_0[:,1]/120, dist3d[:,None]/1000, ang/90))
 cond_vec = torch.tensor(cond)
 dataset= torch.tensor(dataset_0[:,None])
-
+d_min, d_max =0, 0
+bin_edges =np.array ([8, 1000])
 if disable_test_train_split is False:
   # ---- Quantile-based (equal-mass) train/held-out split over 2D distance ----
   # Paper notation: bin boundaries are set at empirical quantiles of S,
@@ -296,7 +297,7 @@ if enable_tensorboard:
   writer_real = SummaryWriter(f"logs/{run_name}/real")
   writer_fake = SummaryWriter(f"logs/{run_name}/fake")
   writer_loss = SummaryWriter(f"logs/{run_name}/loss")
-
+mean_loss = 20
 for epoch in range(epoch_saved +1, n_epoch):
           
       loss_gen_sum, loss_critic_sum, w_dist_sum = 0,0, 0
@@ -393,12 +394,12 @@ for epoch in range(epoch_saved +1, n_epoch):
       mean_loss = np.round(np.mean(_ws_test_list), 6)
       
       #if  (best_test_loss >mean_loss) or ((best_test_loss < mean_loss) and np.abs(best_test_loss-mean_loss)) < 7e-4 or (best_test_loss == 100):
-      if epoch>12:
+      if epoch>=6 or epoch ==1: ### exhaustive search, saving all the models ater a certain number of epochs
         if mean_loss < best_test_loss:
           best_test_loss = mean_loss
           print(f"the updated best loss ={np.round(best_test_loss,4)} ")
  
-        if epoch >=12:
+        if epoch >=6 or  epoch ==1:
           print(f"************************************* New model is saved: best loss ={np.round(best_test_loss,4)} ***************************************")
           saved_loc = f'save_model/cwgan_z_{z_dim}_dist2D_N{N_bins}_p{p_split}_{epoch}_ebin.pt'
           torch.save({
@@ -433,8 +434,8 @@ if enable_tensorboard:
   writer_real.close()
   writer_fake.close()
 
-if disable_test_train_split is False:
-  
+#if disable_test_train_split is False:
+if 1:  # evaluate the saved models and remain the best ones
   # ----------------------- Automatic evaluation after training -----------------------
   eval_cmd = [
       sys.executable, "EM_distance_eval_v2.py",
