@@ -1,7 +1,7 @@
 # A Geometry-based Stochastic Wireless Channel Model using Channel Images
 
  ### In this work, we obtain channel parameters from the ray-tracing simulation in a specific area and process them in the form of images to train any generative model.
-### For the detailed descriptions of this implementation, we kindly suggest to read the paper, [A Geometry-based Stochastic Wireless Channel Model using Channel Images](https://arxiv.org/abs/2312.06637)
+### For the detailed descriptions of this implementation, we kindly suggest to read the paper, [https://ieeexplore.ieee.org/document/10914420](https://arxiv.org/abs/2312.06637)
 ### Extended decription -> [Geometry-based Stochastic Wireless Channel Model using Generative Neural Networks](https://www.techrxiv.org/doi/full/10.36227/techrxiv.172114994.43396874)
 
 # Channel Image Generation and Model Training
